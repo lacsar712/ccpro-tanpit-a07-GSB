@@ -12,16 +12,9 @@ def seed_demo() -> None:
     worker.save()
     if Yard.objects.exists():
         return
+    # 干净起步：一口鞣制中坑，最近酸碱度已落在 3.5～5.0 带内，尚无任何联签簿/签字。
     yard = Yard.objects.create(name="南冈鞣场", village="青皮村")
-    layout = [
-        ("东-1", Pit.STATUS_TANNING, 0, 0, 4.2),
-        ("东-2", Pit.STATUS_FILL, 0, 1, None),
-        ("中-1", Pit.STATUS_DRAINED, 1, 0, 4.6),
-        ("中-2", Pit.STATUS_TANNING, 1, 1, 6.1),
-        ("西-1", Pit.STATUS_FILL, 2, 0, None),
-        ("西-2", Pit.STATUS_DRAINED, 2, 1, 3.8),
-    ]
-    for code, status, row, col, ph in layout:
-        pit = Pit.objects.create(yard=yard, code=code, status=status, row=row, col=col)
-        if ph is not None:
-            LiquorSample.objects.create(pit=pit, ph=ph, operator="worker")
+    pit = Pit.objects.create(
+        yard=yard, code="中-1", status=Pit.STATUS_TANNING, row=0, col=0
+    )
+    LiquorSample.objects.create(pit=pit, ph=4.2, operator="worker")
